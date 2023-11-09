@@ -1,0 +1,36 @@
+## <summary>munin-node policy</summary>
+## <desc>
+##	<p>
+##		More descriptive text about myapp.  The <desc>
+##		tag can also use <p>, <ul>, and <ol>
+##		html tags for formatting.
+##	</p>
+##	<p>
+##		This policy supports the following myapp features:
+##		<ul>
+##		<li>Feature A</li>
+##		<li>Feature B</li>
+##		<li>Feature C</li>
+##		</ul>
+##	</p>
+## </desc>
+#
+
+########################################
+## <summary>
+##	Execute a domain transition to run myapp.
+## </summary>
+## <param name="domain">
+##	Domain allowed to transition.
+## </param>
+#
+interface(`munin-node_domtrans',`
+	gen_require(`
+		type munin-node_t, munin-node_exec_t;
+	')
+
+	domain_auto_trans($1,munin-node_exec_t,munin-node_t)
+
+	allow $1 munin-node_t:fd use;
+	allow munin-node_t $1:fd use;
+')

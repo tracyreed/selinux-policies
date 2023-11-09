@@ -1,0 +1,42 @@
+policy_module(autoresponder, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type autoresponder_t;
+type autoresponder_exec_t;
+
+require {
+    type procmail_t;
+    type automated_tasks_db_t;
+    class file { read getattr execute ioctl execute_no_trans };
+}
+
+domain_type(autoresponder_t)
+domain_entry_file(autoresponder_t, autoresponder_exec_t)
+
+########################################
+#
+# autoresponder local policy
+#
+
+# /etc/sudoers on mail contains:
+# %autoresponder ALL=(autoresponder)       NOPASSWD: /automated_tasks/autoresponder.pl
+# and /etc/groups contains:
+# apache:x:48:autoresponder
+# So apache can sudo off the autoresponder.pl command. procmail is involved in
+# here somewhere
+
+#============= procmail_t ==============
+allow procmail_t automated_tasks_db_t:file { read getattr ioctl };
+allow procmail_t autoresponder_exec_t:file { read getattr execute ioctl execute_no_trans };
+
+#============= procmail_t ==============
+#allow procmail_t default_t:file { read execute ioctl execute_no_trans };
+allow procmail_t self:capability audit_write;
+allow procmail_t self:netlink_audit_socket { nlmsg_relay write create read };
+allow procmail_t self:process setcap;
+auth_read_pam_pid(procmail_t)
+corenet_tcp_connect_mysqld_port(procmail_t)

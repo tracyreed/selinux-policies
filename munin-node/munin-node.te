@@ -1,0 +1,243 @@
+policy_module(munin-node, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type munin-node_t;
+type munin-node_exec_t;
+
+require {
+    type ifconfig_t;
+    type audisp_t;
+    type auditd_t;
+    type binfmt_misc_fs_t;
+    type bin_t;
+    type crond_t;
+    type devpts_t;
+    type etc_runtime_t;
+    type etc_t;
+    type fixed_disk_device_t;
+    type fsdaemon_t;
+    type fs_t;
+    type getty_t;
+    type hald_t;
+    type home_root_t;
+    type httpd_t;
+    type ifconfig_exec_t;
+    type inaddr_any_node_t;
+    type inetd_t;
+    type init_t;
+    type initrc_t;
+    type initrc_var_run_t;
+    type irqbalance_t;
+    type kernel_t;
+    type klogd_t;
+    type ld_so_cache_t;
+    type ld_so_t;
+    type lib_t;
+    type locale_t;
+    type lvm_control_t;
+    type mysqld_t;
+    type net_conf_t;
+    type ntpd_t;
+    type pcscd_t;
+    type port_t;
+    type postfix_cleanup_t;
+    type postfix_etc_t;
+    type postfix_master_t;
+    type postfix_pickup_t;
+    type postfix_pipe_t;
+    type postfix_qmgr_t;
+    type postfix_smtpd_t;
+    type postfix_smtp_t;
+    type postfix_spool_maildrop_t;
+    type postfix_spool_t;
+    type postfix_virtual_t;
+    type postfix_bounce_t;
+    type postfix_local_t;
+    type proc_net_t;
+    type proc_t;
+    type restorecond_t;
+    type sbin_t;
+    type setrans_t;
+    type setroubleshootd_t;
+    type shell_exec_t;
+    type spamc_t;
+    type spamd_t;
+    type sysctl_fs_t;
+    type sysctl_kernel_t;
+    type sysfs_t;
+    type syslogd_t;
+    type system_dbusd_t;
+    type tmpfs_t;
+    type tmp_t;
+    type udev_t;
+    type unconfined_t;
+    type urandom_device_t;
+    type user_home_t;
+    type usr_t;
+    type var_run_t;
+    type var_spool_t;
+    type var_t;
+	type var_run_t;
+    type courier_imapd_t;
+    type courier_tls_t;
+	class capability { setuid setgid dac_override };
+	class tcp_socket { ioctl setopt shutdown bind create listen };
+	class fifo_file { write read ioctl getattr };
+	class udp_socket { write getattr connect read create ioctl };
+	class file { read getattr execute ioctl execute_no_trans unlink };
+}
+
+domain_type(munin-node_t)
+
+domain_entry_file(munin-node_t, munin-node_exec_t)
+init_daemon_domain(munin-node_t, munin-node_exec_t)
+
+# This macro obviates the need for many of the allows below but I will have to
+# carefully remove them and test later to clean it up.
+domain_read_all_domains_state(munin-node_t)
+
+########################################
+#
+# munin-node local policy
+#
+
+
+#============= munin-node_t ==============
+allow munin-node_t audisp_t:dir { getattr search };
+allow munin-node_t audisp_t:file { read getattr };
+allow munin-node_t auditd_t:dir { getattr search };
+allow munin-node_t auditd_t:file { read getattr };
+allow munin-node_t bin_t:file { read execute getattr execute_no_trans };
+allow munin-node_t bin_t:lnk_file read;
+allow munin-node_t binfmt_misc_fs_t:filesystem getattr;
+allow munin-node_t crond_t:dir { getattr search };
+allow munin-node_t crond_t:file { read getattr };
+allow munin-node_t devpts_t:filesystem getattr;
+allow munin-node_t etc_runtime_t:file { read getattr };
+allow munin-node_t etc_t:dir { read search getattr };
+allow munin-node_t etc_t:file { read getattr ioctl };
+allow munin-node_t etc_t:lnk_file read;
+allow munin-node_t fixed_disk_device_t:blk_file getattr;
+allow munin-node_t fs_t:filesystem getattr;
+allow munin-node_t fsdaemon_t:dir { getattr search };
+allow munin-node_t fsdaemon_t:file { read getattr };
+allow munin-node_t getty_t:dir { getattr search };
+allow munin-node_t getty_t:file { read getattr };
+allow munin-node_t hald_t:dir { getattr search };
+allow munin-node_t hald_t:file { read getattr };
+allow munin-node_t home_root_t:dir search;
+allow munin-node_t httpd_t:dir { getattr search };
+allow munin-node_t httpd_t:file { read getattr };
+allow munin-node_t ifconfig_exec_t:file { read getattr execute execute_no_trans };
+allow munin-node_t inaddr_any_node_t:tcp_socket node_bind;
+allow munin-node_t inetd_t:dir { getattr search };
+allow munin-node_t inetd_t:file { read getattr };
+allow munin-node_t init_t:dir { getattr search };
+allow munin-node_t init_t:file { read getattr };
+allow munin-node_t irqbalance_t:dir { getattr search };
+allow munin-node_t irqbalance_t:file { read getattr };
+allow munin-node_t kernel_t:dir { getattr search };
+allow munin-node_t kernel_t:file { read getattr };
+allow munin-node_t klogd_t:dir { getattr search };
+allow munin-node_t klogd_t:file { read getattr };
+allow munin-node_t ld_so_cache_t:file { read getattr };
+allow munin-node_t ld_so_t:file { read execute };
+allow munin-node_t lib_t:dir { search getattr };
+allow munin-node_t lib_t:file { read getattr execute ioctl execute_no_trans };
+allow munin-node_t lib_t:lnk_file read;
+allow munin-node_t locale_t:dir search;
+allow munin-node_t locale_t:file { read getattr };
+allow munin-node_t lvm_control_t:chr_file getattr;
+allow munin-node_t mysqld_t:dir { getattr search };
+allow munin-node_t mysqld_t:file { read getattr };
+allow munin-node_t net_conf_t:file { read getattr };
+allow munin-node_t ntpd_t:dir { getattr search };
+allow munin-node_t ntpd_t:file { read getattr };
+allow munin-node_t pcscd_t:dir { getattr search };
+allow munin-node_t pcscd_t:file { read getattr };
+allow munin-node_t port_t:tcp_socket name_bind;
+allow munin-node_t postfix_cleanup_t:dir { getattr search };
+allow munin-node_t postfix_cleanup_t:file { read getattr };
+allow munin-node_t postfix_etc_t:dir search;
+allow munin-node_t postfix_etc_t:file { read getattr };
+allow munin-node_t postfix_master_t:dir { getattr search };
+allow munin-node_t postfix_master_t:file { read getattr };
+allow munin-node_t postfix_pickup_t:dir { getattr search };
+allow munin-node_t postfix_pickup_t:file { read getattr };
+allow munin-node_t postfix_pipe_t:dir { getattr search };
+allow munin-node_t postfix_pipe_t:file { read getattr };
+allow munin-node_t postfix_qmgr_t:dir { getattr search };
+allow munin-node_t postfix_qmgr_t:file { read getattr };
+allow munin-node_t postfix_smtp_t:dir { getattr search };
+allow munin-node_t postfix_smtp_t:file { read getattr };
+allow munin-node_t postfix_smtpd_t:dir { getattr search };
+allow munin-node_t postfix_smtpd_t:file { read getattr };
+allow munin-node_t postfix_spool_maildrop_t:dir { read getattr search };
+allow munin-node_t postfix_spool_t:dir { read getattr search };
+allow munin-node_t postfix_virtual_t:dir { getattr search };
+allow munin-node_t postfix_virtual_t:file { read getattr };
+allow munin-node_t proc_net_t:dir search;
+allow munin-node_t proc_net_t:file { read getattr ioctl };
+allow munin-node_t proc_t:dir read;
+allow munin-node_t proc_t:file { read getattr ioctl };
+allow munin-node_t restorecond_t:dir { getattr search };
+allow munin-node_t restorecond_t:file { read getattr };
+allow munin-node_t sbin_t:file { read getattr execute execute_no_trans };
+allow munin-node_t setrans_t:dir { getattr search };
+allow munin-node_t setrans_t:file { read getattr };
+allow munin-node_t setroubleshootd_t:dir { getattr search };
+allow munin-node_t setroubleshootd_t:file { read getattr };
+allow munin-node_t shell_exec_t:file { read execute getattr execute_no_trans };
+allow munin-node_t spamc_t:dir { getattr search };
+allow munin-node_t spamc_t:file { read getattr };
+allow munin-node_t spamd_t:dir { getattr search };
+allow munin-node_t spamd_t:file { read getattr };
+allow munin-node_t sysctl_fs_t:dir search;
+allow munin-node_t sysctl_fs_t:file { read getattr ioctl };
+allow munin-node_t sysctl_kernel_t:dir search;
+allow munin-node_t sysctl_kernel_t:file { read getattr };
+allow munin-node_t sysfs_t:dir { read search };
+allow munin-node_t sysfs_t:file { read getattr ioctl };
+allow munin-node_t sysfs_t:filesystem getattr;
+allow munin-node_t syslogd_t:dir { getattr search };
+allow munin-node_t syslogd_t:file { read getattr };
+allow munin-node_t system_dbusd_t:dir { getattr search };
+allow munin-node_t system_dbusd_t:file { read getattr };
+allow munin-node_t tmp_t:dir { write remove_name search getattr add_name };
+allow munin-node_t tmp_t:file { write read create unlink getattr };
+allow munin-node_t tmpfs_t:filesystem getattr;
+allow munin-node_t udev_t:dir { getattr search };
+allow munin-node_t udev_t:file { read getattr };
+allow munin-node_t unconfined_t:dir { getattr search };
+allow munin-node_t unconfined_t:file { read getattr };
+allow munin-node_t urandom_device_t:chr_file read;
+allow munin-node_t user_home_t:dir { getattr search };
+allow munin-node_t usr_t:dir search;
+allow munin-node_t usr_t:file { ioctl append getattr setattr };
+allow munin-node_t var_run_t:dir { write add_name remove_name };
+allow munin-node_t var_run_t:file { write create ioctl setattr getattr unlink read };
+allow munin-node_t var_spool_t:dir { getattr search };
+allow munin-node_t var_t:file { read write ioctl getattr };
+allow munin-node_t self:capability { setuid setgid dac_override };
+allow munin-node_t self:fifo_file { write read ioctl getattr };
+allow munin-node_t self:tcp_socket { accept read getattr ioctl write getopt setopt shutdown bind create listen };
+allow munin-node_t self:udp_socket { write getattr connect read create ioctl };
+allow munin-node_t self:process ptrace;
+allow munin-node_t initrc_t:dir { getattr search };
+allow munin-node_t initrc_t:file { read getattr };
+allow munin-node_t initrc_var_run_t:file { read lock };
+allow munin-node_t postfix_bounce_t:dir { search getattr };
+allow munin-node_t postfix_bounce_t:file { read getattr };
+allow munin-node_t courier_imapd_t:dir { getattr search };
+allow munin-node_t courier_tls_t:dir { getattr search };
+allow munin-node_t courier_tls_t:file { getattr read };
+allow munin-node_t postfix_local_t:dir { search };
+allow munin-node_t postfix_local_t:file { read };
+
+#============= ifconfig_t ==============
+# Not sure how or why but munin-node needs this
+allow ifconfig_t initrc_t:tcp_socket { read write };

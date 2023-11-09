@@ -1,0 +1,4 @@
+policy_module(db, 1.0.0)
+
+
+type automated_tasks_db_t;

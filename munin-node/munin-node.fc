@@ -1,0 +1,6 @@
+# munin-node executable will have:
+# label: system_u:object_r:munin-node_exec_t
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/opt/munin/sbin/munin-node		--	gen_context(system_u:object_r:munin-node_exec_t,s0)

@@ -1,0 +1,25 @@
+policy_module(puppet, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type puppet_t;
+type puppet_exec_t;
+
+require {
+    type automated_tasks_db_t;
+    type initrc_t;
+}
+
+domain_type(puppet_t)
+domain_entry_file(puppet_t, puppet_exec_t)
+
+########################################
+#
+# puppet local policy
+#
+
+allow initrc_t automated_tasks_db_t:file { read getattr };
+allow unconfined_t automated_tasks_db_t:file { getattr read };

@@ -1,0 +1,5 @@
+ifdef(`munin-node_per_role_template',`
+')
+ifdef(`munin-node_per_userdomain_template',`
+errprint(`Warning: per_userdomain_templates have been renamed to per_role_templates (munin-node_per_userdomain_template)'__endline__)
+')

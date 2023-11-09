@@ -1,0 +1,10 @@
+# lollerskates executable will have:
+# label: system_u:object_r:lollerskates_exec_t
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/usr/local/lollerskates/lollerskates.py		--	gen_context(system_u:object_r:lollerskates_exec_t,s0)
+/usr/local/lollerskates/lollerskates_config.py	--	gen_context(system_u:object_r:lollerskates_conf_t,s0)
+/usr/local/lollerskates/.*ignore.conf		--	gen_context(system_u:object_r:lollerskates_conf_t,s0)
+/var/lib/lollerskates/*.offset			--	gen_context(system_u:object_r:lollerskates_offset_t,s0)
+/tmp/lollerskates.py.lock			--	gen_context(system_u:object_r:lollerskates_lock_t,s0)

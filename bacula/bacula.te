@@ -1,0 +1,27 @@
+policy_module(email2feedback, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type email2feedback_t;
+type email2feedback_exec_t;
+
+require {
+    type automated_tasks_db_t;
+}
+
+domain_type(email2feedback_t)
+domain_entry_file(email2feedback_t, email2feedback_exec_t)
+
+########################################
+#
+# email2feedback local policy
+#
+
+allow email2feedback_t automated_tasks_db_t:file { read getattr ioctl };
+
+# Something is wrong here, unconfined_t should NOT be needed. email2feedback.pl
+# may not be running in the right context or something.
+allow unconfined_t     automated_tasks_db_t:file { ioctl };

@@ -1,0 +1,53 @@
+## <summary>lollerskates policy</summary>
+## <desc>
+##	<p>
+##		More descriptive text about myapp.  The <desc>
+##		tag can also use <p>, <ul>, and <ol>
+##		html tags for formatting.
+##	</p>
+##	<p>
+##		This policy supports the following myapp features:
+##		<ul>
+##		<li>Feature A</li>
+##		<li>Feature B</li>
+##		<li>Feature C</li>
+##		</ul>
+##	</p>
+## </desc>
+#
+
+########################################
+## <summary>
+##	Execute a domain transition to run myapp.
+## </summary>
+## <param name="domain">
+##	Domain allowed to transition.
+## </param>
+#
+interface(`lollerskates_domtrans',`
+	gen_require(`
+		type lollerskates_t, lollerskates_exec_t;
+	')
+
+	domain_auto_trans($1,lollerskates_exec_t,lollerskates_t)
+
+	allow $1 lollerskates_t:fd use;
+	allow lollerskates_t $1:fd use;
+')
+
+########################################
+## <summary>
+##	Read lollerskates log files.
+## </summary>
+## <param name="domain">
+##	Domain allowed to read the log files.
+## </param>
+#
+interface(`lollerskates_read_log',`
+	gen_require(`
+		type lollerskates_log_t;
+	')
+
+	logging_search_logs($1)
+	allow $1 lollerskates_log_t:file r_file_perms;
+')

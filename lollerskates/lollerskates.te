@@ -1,0 +1,24 @@
+policy_module(lollerskates, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type lollerskates_t;
+type lollerskates_exec_t;
+type lollerskates_offset_t;
+type lollerskates_conf_t;
+type lollerskates_lock_t;
+
+domain_type(lollerskates_t)
+domain_entry_file(lollerskates_t, lollerskates_exec_t)
+
+files_config_file(lollerskates_conf_t)
+files_tmp_filetrans(lollerskates_t,lollerskates_lock_t,file)
+
+########################################
+#
+# lollerskates local policy
+#
+

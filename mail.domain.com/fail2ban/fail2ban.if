@@ -1,0 +1,36 @@
+## <summary>fail2ban policy</summary>
+## <desc>
+##	<p>
+##		More descriptive text about myapp.  The <desc>
+##		tag can also use <p>, <ul>, and <ol>
+##		html tags for formatting.
+##	</p>
+##	<p>
+##		This policy supports the following myapp features:
+##		<ul>
+##		<li>Feature A</li>
+##		<li>Feature B</li>
+##		<li>Feature C</li>
+##		</ul>
+##	</p>
+## </desc>
+#
+
+########################################
+## <summary>
+##	Execute a domain transition to run myapp.
+## </summary>
+## <param name="domain">
+##	Domain allowed to transition.
+## </param>
+#
+interface(`fail2ban_domtrans',`
+	gen_require(`
+		type fail2ban_t, fail2ban_exec_t;
+	')
+
+	domain_auto_trans($1,fail2ban_exec_t,fail2ban_t)
+
+	allow $1 fail2ban_t:fd use;
+	allow fail2ban_t $1:fd use;
+')

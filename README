@@ -1,0 +1,9 @@
+Compile/install these with:
+
+cd autoresponder
+make -f /usr/share/selinux/devel/Makefile autoresponder.pp
+/usr/sbin/semodule -i autoresponder.pp
+
+replacing autoresponder with whatever the name of the policy is that you want to compile/install.
+
+selinux-policy-devel must be installed.

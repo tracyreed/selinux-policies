@@ -1,0 +1,112 @@
+policy_module(courier_imap, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+require {
+    type cert_t;
+    type etc_t;
+    type home_root_t;
+    type initrc_t;
+    type ld_so_t;
+    type ld_so_cache_t;
+    type lib_t;
+    type locale_t;
+    type proc_t;
+    type urandom_device_t;
+    type usr_t;
+    type user_home_t;
+
+    class file { read write create write unlink getattr relabelto };
+    class dir { add_name remove_name };
+    class tcp_socket { read write };
+    class filesystem { associate };
+}
+
+# Types for the excutables
+type courier_tls_exec_t;
+type courier_imapd_exec_t;
+type couriertcpd_exec_t;
+type courier_authdaemond_exec_t;
+type courier_logger_exec_t;
+type courier_var_run_t;
+
+# Types for the domains
+type courier_tls_t;
+type courier_imapd_t;
+type couriertcpd_t;
+type courier_authdaemond_t;
+type courier_logger_t;
+
+fs_associate(courier_authdaemond_exec_t)
+fs_associate(courier_imapd_exec_t)
+fs_associate(couriertcpd_exec_t)
+fs_associate(courier_tls_exec_t)
+fs_associate(courier_var_run_t)
+
+########################################
+#
+# courier-imap local policy
+#
+
+# Let the executables transition into their own domains instead of running in initrc_t
+domain_type(courier_tls_t)
+init_daemon_domain(courier_tls_t, courier_tls_exec_t)
+
+domain_type(courier_imapd_t)
+init_daemon_domain(courier_imapd_t, courier_imapd_exec_t)
+
+domain_type(couriertcpd_t)
+#init_daemon_domain(couriertcpd_t, couriertcpd_exec_t)
+
+domain_type(courier_authdaemond_t)
+init_daemon_domain(courier_authdaemond_t, courier_authdaemond_exec_t)
+
+domain_type(courier_logger_t)
+#init_daemon_domain(courier_logger_t, courier_logger_exec_t)
+
+# Let the nightly system prelinker do its thing to these executable types
+prelink_object_file(courier_authdaemond_exec_t);
+prelink_object_file(courier_imapd_exec_t);
+prelink_object_file(couriertcpd_exec_t);
+prelink_object_file(courier_tls_exec_t);
+
+allow courier_imapd_t etc_t:dir { search };
+allow courier_imapd_t home_root_t:dir { search };
+allow courier_imapd_t home_root_t:lnk_file { read };
+allow courier_imapd_t initrc_t:tcp_socket { read write };
+allow courier_imapd_t initrc_t:unix_stream_socket { read write };
+allow courier_imapd_t ld_so_cache_t:file { read getattr };
+allow courier_imapd_t ld_so_t:file { read };
+allow courier_imapd_t lib_t:lnk_file { read };
+allow courier_imapd_t lib_t:file { execute getattr read };
+allow courier_imapd_t lib_t:dir { getattr search };
+allow courier_imapd_t locale_t:file { getattr read };
+allow courier_imapd_t proc_t:file { getattr read };
+allow courier_imapd_t usr_t:dir { search };
+allow courier_imapd_t user_home_t:file { rename read write create write unlink setattr getattr link };
+allow courier_imapd_t user_home_t:dir { add_name remove_name getattr setattr search read write };
+allow courier_tls_t   cert_t:dir { search };
+allow courier_tls_t   courier_var_run_t:file { relabelto getattr lock read write };
+allow courier_tls_t   etc_t:dir { search }
+allow courier_tls_t   initrc_t:unix_stream_socket { read write };
+allow courier_tls_t   initrc_t:tcp_socket { read setopt write };
+allow courier_tls_t   usr_t:dir { search }
+allow courier_tls_t   urandom_device_t:file { getattr read };
+allow courier_tls_t   user_home_t:dir { search read write add_name remove_name };
+allow courier_tls_t   user_home_t:file { create unlink getattr write read rename };
+allow courier_tls_t   urandom_device_t:chr_file { getattr read };
+allow courier_tls_t   ld_so_t:file { read }
+allow courier_tls_t   ld_so_cache_t:file { read }
+allow courier_tls_t   ld_so_cache_t:file { getattr }
+allow courier_tls_t   lib_t:link_file { read }
+allow courier_tls_t   lib_t:dir { search }
+allow courier_tls_t   lib_t:file { read }
+allow courier_tls_t   lib_t:file { execute getattr }
+
+
+# Some database stuff we have linked into courier-imap wants to read
+# /usr/share/mysql/charsets/Index.xml so we have to let courier-imap_cleanup_t read
+# usr_t files.

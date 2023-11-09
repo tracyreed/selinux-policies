@@ -1,0 +1,6 @@
+# email2feedback executable will have:
+# label: system_u:object_r:email2feedback_exec_t
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/automated_tasks/email2feedback.pl		--	gen_context(system_u:object_r:email2feedback_exec_t,s0)

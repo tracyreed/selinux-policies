@@ -1,0 +1,8 @@
+# fail2ban executable will have:
+# label: system_u:object_r:fail2ban_exec_t
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/usr/bin/fail2ban-client                --	gen_context(system_u:object_r:fail2ban_exec_t,s0)
+/usr/bin/fail2ban-regex                 --	gen_context(system_u:object_r:fail2ban_exec_t,s0)
+/usr/bin/fail2ban-server                --	gen_context(system_u:object_r:fail2ban_exec_t,s0)

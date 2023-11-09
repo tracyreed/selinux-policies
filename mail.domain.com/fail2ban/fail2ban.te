@@ -1,0 +1,92 @@
+policy_module(fail2ban, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type fail2ban_t;
+type fail2ban_exec_t;
+
+require {
+    type bin_t;
+    type devlog_t;
+    type etc_t;
+    type initrc_t;
+    type ld_so_cache_t;
+    type locale_t;
+    type postfix_postdrop_exec_t;
+    type postfix_public_t;
+    type postfix_spool_maildrop_t;
+    type var_run_t;
+    type syslogd_t;
+    type inotifyfs_t;
+    class file { rename execute setattr read create execute_no_trans write getattr unlink };
+    class process setrlimit;
+    class unix_stream_socket connectto;
+    class capability { net_admin net_raw };
+    class fifo_file { write read getattr };
+    class rawip_socket { getopt create setopt };
+    class sock_file { write getattr unlink create };
+    class unix_dgram_socket { write create connect sendto };
+    class udp_socket { create ioctl };
+    class dir { write remove_name search add_name };
+}
+
+domain_type(fail2ban_t)
+domain_entry_file(fail2ban_t, fail2ban_exec_t)
+init_daemon_domain(fail2ban_t, fail2ban_exec_t)
+
+########################################
+#
+# fail2ban local policy
+#
+
+#============= fail2ban_t ==============
+allow fail2ban_t bin_t:file { read getattr execute execute_no_trans };
+allow fail2ban_t devlog_t:sock_file write;
+allow fail2ban_t etc_t:file { read getattr };
+allow fail2ban_t fail2ban_exec_t:file execute_no_trans;
+allow fail2ban_t initrc_t:unix_stream_socket connectto;
+allow fail2ban_t ld_so_cache_t:file { read getattr };
+allow fail2ban_t locale_t:dir search;
+allow fail2ban_t locale_t:file { read getattr };
+allow fail2ban_t postfix_postdrop_exec_t:file { read execute execute_no_trans };
+allow fail2ban_t postfix_public_t:dir search;
+allow fail2ban_t postfix_public_t:fifo_file { write getattr };
+allow fail2ban_t postfix_spool_maildrop_t:dir { write remove_name search add_name };
+allow fail2ban_t postfix_spool_maildrop_t:file { rename write create getattr setattr };
+allow fail2ban_t self:capability { net_admin net_raw };
+allow fail2ban_t self:fifo_file { write read getattr };
+allow fail2ban_t self:process setrlimit;
+allow fail2ban_t self:rawip_socket { getopt create setopt };
+allow fail2ban_t self:udp_socket { create ioctl };
+allow fail2ban_t self:unix_dgram_socket { write create connect };
+allow fail2ban_t self:unix_stream_socket connectto;
+allow fail2ban_t syslogd_t:unix_dgram_socket sendto;
+allow fail2ban_t var_run_t:file { write create unlink getattr };
+allow fail2ban_t var_run_t:sock_file { write getattr unlink create };
+allow fail2ban_t inotifyfs_t:dir { read getattr };
+
+corecmd_exec_shell(fail2ban_t)
+corecmd_read_bin_symlinks(fail2ban_t)
+files_read_etc_symlinks(fail2ban_t)
+files_read_usr_files(fail2ban_t)
+files_search_spool(fail2ban_t)
+files_search_usr(fail2ban_t)
+iptables_exec(fail2ban_t)
+kernel_read_system_state(fail2ban_t)
+libs_exec_ld_so(fail2ban_t)
+libs_exec_lib_files(fail2ban_t)
+libs_read_lib_files(fail2ban_t)
+logging_read_generic_logs(fail2ban_t)
+mta_sendmail_exec(fail2ban_t)
+postfix_read_config(fail2ban_t)
+postfix_search_spool(fail2ban_t)
+ppp_pid_filetrans(fail2ban_t)
+ppp_manage_pid_files(fail2ban_t)
+ppp_pid_filetrans(fail2ban_t)
+seutil_dontaudit_read_file_contexts(fail2ban_t)
+unconfined_shell_domtrans(fail2ban_t)
+userdom_dontaudit_relabel_generic_user_home_content_files(fail2ban_t)
+userdom_read_generic_user_home_content_files(fail2ban_t)

@@ -1,0 +1,6 @@
+# MLS sensitivity: s0
+# MCS categories: <none>
+
+/automated_tasks/etc/mysql_auth.class.php       --      gen_context(system_u:object_r:automated_tasks_db_t,s0)
+/automated_tasks/etc/mysql_auth.pm              --      gen_context(system_u:object_r:automated_tasks_db_t,s0)
+/automated_tasks/etc/mysql_edirect.conf.ini     --      gen_context(system_u:object_r:automated_tasks_db_t,s0)
