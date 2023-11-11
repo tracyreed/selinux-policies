@@ -1,5 +1,0 @@
-ifdef(`fail2ban_per_role_template',`
-')
-ifdef(`fail2ban_per_userdomain_template',`
-errprint(`Warning: per_userdomain_templates have been renamed to per_role_templates (fail2ban_per_userdomain_template)'__endline__)
-')
